@@ -21,11 +21,11 @@ class Employee:
 class Programmer(Employee):
     def __init__(self,bonus,base):
         self.bonus=bonus
-        super().__init__(base)#需要指出是引用父类的哪个部分
+        super().__init__(base)
     
     def get_salary(self):
-        return super().get_salary()+self.bonus#父类变化之后，子类也会跟着变化
-    
+        return super().get_salary()+self.bonus
+        
 class Tester(Employee):
     def __init__(self, bug_number,base):
         self.bug_number=bug_number
@@ -33,7 +33,8 @@ class Tester(Employee):
 
     def get_salary(self):
         return super().get_salary()+self.bug_number*5
-        
+
+#Test:
 emp=EmployeeManagementSystem()
 e01=emp.add_employee(Programmer(10000,5000))
 e02=emp.add_employee(Tester(8000,40))
