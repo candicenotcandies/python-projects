@@ -1,0 +1,55 @@
+import random
+
+
+class DouDiZhu:
+    def __init__(self):
+        self.__pocker = []
+        self.__boss = ['\u2655', '\u2654']
+        self.__pocker_color = ['\u2665', '\u2660', '\u2663', '\u2666']
+
+    def __create_pocker(self):
+        '''  Generate 54 cards '''
+        for color in self.__pocker_color:
+            # suits + numbers
+            for i in range(2, 11):
+                self.__pocker.append(color+str(i))
+
+            # suits + 'AJQK'
+            for char in 'AJQK':
+                self.__pocker.append(color + char)
+        self.__pocker += self.__boss
+    def __give_pocker(self):
+        ''' Dealing: 3 players + 3 cards left
+            Choice 1：take only one card a time
+            Choice 2：deal cards randomly and give every one 17 cards a time
+        '''
+        # Choice 1：
+        # player1 = self.__pocker[:51:3]
+        # player2 = self.__pocker[1:51:3]
+        # player3 = self.__pocker[2:51:3]
+        # remain = self.__pocker[51:]
+        # print(player1, player2, player3, remain)
+        # print(len(player1), len(player2), len(player3), len(remain))
+
+        # Choice 2：
+        player1 = self.__pocker[:17]
+        player2 = self.__pocker[17:34]
+        player3 = self.__pocker[34:51]
+        remain = self.__pocker[51:]
+        print(player1, player2, player3, remain)
+        print(len(player1), len(player2), len(player3), len(remain))
+
+    def main(self):
+        # 1. Generate 54 cards
+        self.__create_pocker()
+
+        # 2. Wash the cards
+        random.shuffle(self.__pocker)
+        # print(self.__pocker, len(self.__pocker))
+
+        # 3. Deal the cards
+        self.__give_pocker()
+
+if __name__ == '__main__':
+    ddz = DouDiZhu()
+    ddz.main()
