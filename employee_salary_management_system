@@ -1,0 +1,40 @@
+class EmployeeManagementSystem:
+    def __init__(self):
+        self.employee_list=[]
+
+    def add_employee(self,new_employee):
+        self.employee_list.append(new_employee)
+
+    def calculate_salary(self):
+        total_salary=0
+        for item in self.employee_list:
+            total_salary+=item.get_salary()
+        return total_salary
+
+class Employee:
+    def __init__(self,base):
+        self.base=base
+
+    def get_salary(self):
+        return self.base
+
+class Programmer(Employee):
+    def __init__(self,bonus,base):
+        self.bonus=bonus
+        super().__init__(base)#需要指出是引用父类的哪个部分
+    
+    def get_salary(self):
+        return super().get_salary()+self.bonus#父类变化之后，子类也会跟着变化
+    
+class Tester(Employee):
+    def __init__(self, bug_number,base):
+        self.bug_number=bug_number
+        super().__init__(base)
+
+    def get_salary(self):
+        return super().get_salary()+self.bug_number*5
+        
+emp=EmployeeManagementSystem()
+e01=emp.add_employee(Programmer(10000,5000))
+e02=emp.add_employee(Tester(8000,40))
+print(emp.calculate_salary())
