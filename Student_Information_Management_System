@@ -1,0 +1,162 @@
+'''
+StudentModel
+Data: name, age, score, id
+
+StudentManagerController:
+Data: student list: __stu__list
+Actions: Obtain student list: stu_list
+    Add student: add_student
+    Remove student from the list: remove_student(stu.id)
+    Update student information: update_student(new_stu)
+    Rank students according to their score in a ascending order: order_by_score
+    
+StudentManagerView:
+    Data: Objects from Controller
+    Actions:
+    Display menu: __display_menu
+    Select menu: __select_menu_item，入口逻辑main
+    Input student information: __input_students
+    Display student information: __output_students
+    Delete student information: __delete_student
+    Modify student information: __modify_student
+    Output student information by their scores in ascending order: __output_students_order_by_score
+'''
+class StudentModel:
+    def __init__(self,name='',age=0,score=0,id=0):
+        self.name=name
+        self.age=age
+        self.score=score
+        self.id=id
+        
+class StudentManagerController:
+    init_id =1000 
+
+    @classmethod
+    def __generate_id(cls,stu):
+        stu.id=cls.init_id
+        cls.init_id+=1
+
+    #def __init__(self,stu_list):
+        #self.stu_list=stu_list
+    def __init__(self):
+        self.__stu_list=[]       
+    
+    @property
+    def stu_list(self):
+        return self.__stu_list
+
+    def acquire_stu_list(self):
+        print(self.stu_list)
+
+    def add_student(self,stu):
+        #input.id=StudentManagerController.init_id
+        #StudentManagerController.init_id+=1
+        StudentManagerController.__generate_id(stu)
+        self.stu_list.append(stu)
+
+    def remove_student(self,stu_id):
+
+        for item in self.__stu_list:
+            if item.id==stu_id:
+                self.__stu_list.remove(item)
+                return True
+        return False
+
+    def update_student(self,new_stu):
+        for item in self.__stu_list:
+            if item.id==new_stu.id:
+                item.name=new_stu.name#修改的是列表重的元素，不是变量
+                item.age=new_stu.age
+                item.score=new_stu.score
+                return True
+        return False
+
+    def order_by_score(self):
+        for r in range(len(self.__stu_list)-1):
+            for c in range(r+1,len(self.__stu_list)):
+                if self.__stu_list[r].score> self.__stu_list[c].score:
+                    self.__stu_list[r],self.__stu_list[c]=self.__stu_list[c],self.__stu_list[r]
+
+class StudentManagerView:
+
+    def __init__(self):
+        self.__controller=StudentManagerController()
+
+    def __display_menu(self):
+        print('1) add student info')
+        print('2) display student info')
+        print('3) remove student info')
+        print('4) update student info')
+        print('5) sort student info by score')
+
+    def __select_menu(self):
+        item= input('Please input a number:')
+        if item=='1':
+            self.__input_students()
+        elif item =='2':
+            self.__output_students()
+        elif item=='3':
+            self.__delete_student()
+        elif item =='4':
+            self.__modify_student()
+        elif item =='5':
+            self.__output_students_order_by_score()
+    
+    def main(self):
+        while True:
+            self.__display_menu()
+            self.__select_menu()
+    
+    def __input_students(self):
+        name= input('Please input student name: ')
+        score=int(input('Please input student score: '))
+        age=int(input('Please input student age: '))
+        stu=StudentModel(name,age,score)
+        #controller=StudentManagerController() 放在这里，每次都会重复创建新的列表，所以要放在类的构造函数里
+        self.__controller.add_student(stu)
+    
+    def __output_students(self):
+        for item in self.__controller.stu_list:
+            print('id:%d,name:%s,age:%d,score:%d'%(item.id,item.name,item.age,item.score))
+
+    def __delete_student(self):
+        stu_id=int(input('Please input id:'))
+        if self.__controller.remove_student(stu_id):
+            print('Sucessful')
+        else:
+            print('Failed')
+
+    def __modify_student(self):
+        stu=StudentModel()
+        stu.id=int(input('Please input the id that needs to be modified: '))
+        stu.name=input('Please input the name that needs to be modified: ')
+        stu.age=int(input('Please input the age that needs to be modified: '))
+        stu.score=int(input('Please input the score that needs to be modified: '))
+        #stu=StudentModel(name,age,score,id)
+        #id=int(input('Please input the id that needs to be modified: '))
+        #name=input('Please input the name that needs to be modified: ')
+        #age=int(input('Please input the age that needs to be modified: '))
+        #score=int(input('Please input the score that needs to be modified: '))
+        if StudentManagerController.update_student(stu):
+            print('Successful Update')
+        else:
+            print('Failed Update')
+
+    def __output_students_order_by_score(self):
+        self.__controller.order_by_score()#调别人的
+        self.__output_students()#调自己的1
+
+
+view= StudentManagerView()
+view.main()
+#Test
+controller=StudentManagerController()
+data01 = StudentModel('Jack',23,96)
+controller.add_student(data01)
+controller.add_student(StudentModel('Amy',25,78))
+print(controller.remove_student(1001))
+controller.update_student(StudentModel('Jackson',24,97,1000))
+controller.order_by_score()
+for item in controller.stu_list:
+    print(item.id,item.name)
+ 
